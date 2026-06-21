@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import { supabase, Categoria } from '@/lib/supabase'
 import { parsearExtrato, categorizarAuto, mesDeData, TransacaoBruta } from '@/lib/parsers'
