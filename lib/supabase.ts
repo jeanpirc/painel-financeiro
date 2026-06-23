@@ -1,22 +1,29 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
-let _client: SupabaseClient | null = null
+let client: ReturnType<typeof createSupabaseClient> | null = null
 
-function getClient(): SupabaseClient {
-  if (!_client) {
-    _client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+function getClient() {
+  if (!client) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!url || !key) {
+      throw new Error('Supabase URL or anon key not configured')
+    }
+
+    client = createSupabaseClient(url, key)
   }
-  return _client
+  return client
 }
 
-export const supabase = new Proxy({} as SupabaseClient, {
-  get(_, prop: string) {
-    return (getClient() as never)[prop]
+export const supabase = {
+  get auth() {
+    return getClient().auth
+  },
+  from(table: string) {
+    return getClient().from(table)
   }
-})
+}
 
 export type Lancamento = {
   id: number
