@@ -1,8 +1,8 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createClient as createSupabaseClient, SupabaseClient } from '@supabase/supabase-js'
 
-let client: ReturnType<typeof createSupabaseClient> | null = null
+let client: SupabaseClient<any, 'public', any> | null = null
 
-function getClient() {
+function getClient(): SupabaseClient<any, 'public', any> {
   if (!client) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -23,7 +23,7 @@ export const supabase = {
   from(table: string) {
     return getClient().from(table)
   }
-}
+} as unknown as SupabaseClient<any, 'public', any>
 
 export type Lancamento = {
   id: number
