@@ -1,29 +1,9 @@
-import { createClient as createSupabaseClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 
-let client: SupabaseClient<any, 'public', any> | null = null
+const SUPABASE_URL = 'https://wxzkqxbmstbzmxynnvhv.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4emtxeGJtc3Riem14eW5udmh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDE0NjYsImV4cCI6MjA5NjE3NzQ2Nn0.N8RXvK1Eh6X-muI3ynyqgGcKcFybnw4zZUtjCwibIV8'
 
-function getClient(): SupabaseClient<any, 'public', any> {
-  if (!client) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!url || !key) {
-      throw new Error('Supabase URL or anon key not configured')
-    }
-
-    client = createSupabaseClient(url, key)
-  }
-  return client
-}
-
-export const supabase = {
-  get auth() {
-    return getClient().auth
-  },
-  from(table: string) {
-    return getClient().from(table)
-  }
-} as unknown as SupabaseClient<any, 'public', any>
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 export type Lancamento = {
   id: number
